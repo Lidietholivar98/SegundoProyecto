@@ -4,7 +4,7 @@
  */
 package Controladores;
 
-import Controladores.AutosController;
+import Controladores.VehiculosController;
 import Controladores.PersonasController;
 import Interfaces.CrudInterfaces;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class VentasController implements CrudInterfaces{
-      MENU metodos = new MENU();
+      MetodosController metodos = new MetodosController();
       
       private static List listautos = new ArrayList();
       private static List listventas = new ArrayList();

@@ -11,7 +11,7 @@ import java.util.List;
 public class PersonasController implements CrudInterfaces {
 
     //Implementa la clase MetodosController (Copia)
-    MENU metodos = new MENU();
+    MetodosController metodos = new MetodosController();
     private static List lista = new ArrayList();
     
     @Override

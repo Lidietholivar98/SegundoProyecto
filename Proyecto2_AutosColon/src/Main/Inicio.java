@@ -1,13 +1,13 @@
 package Main;
 
-import Controladores.AutosController;
+import Controladores.VehiculosController;
 import Controladores.PersonasController;
-import Controladores.MENU;
+import Controladores.MetodosController;
 import Controladores.VentasController;
 
 public class Inicio {
-    public static MENU metodos = new MENU();
-    public static AutosController autos = new AutosController();
+    public static MetodosController metodos = new MetodosController();
+    public static VehiculosController autos = new VehiculosController();
     public static PersonasController personas = new PersonasController();
     public static VentasController ventas = new VentasController();
     
@@ -22,7 +22,7 @@ public class Inicio {
             opcion = metodos.menuBotones("Seleccione una opción", "Reservaciones 1.0", opciones, "Salir");
             switch (opcion) {
                 case 0:   
-                    autos.menuPersonas();
+                    autos.menuVehiculos();
                
                     
                     break;
