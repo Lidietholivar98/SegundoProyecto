@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  *
  * @author aaraya
  */
-public class MetodosController {
+public class UtilsController {
         public void msg(String msg) {
         JOptionPane.showMessageDialog(null, msg);
     }

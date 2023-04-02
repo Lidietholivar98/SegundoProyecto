@@ -1,6 +1,7 @@
 package Interfaces;
 
 public interface CrudInterfaces {
+    
     public void Crear();
     
     public void Modificar();
@@ -11,5 +12,5 @@ public interface CrudInterfaces {
     
     public void Informe();
     
-    public void Buscar();
+    public void Ver();
 }

@@ -1,26 +1,28 @@
 package Modelo;
 
 public class Persona {
-    // 1. Atributos
-    private int id;
+
+    private String numeroId;
     private String nombre;
+    private String numeroTelefono;
+    private String email;
     
-    // 2. Constructores
     public Persona() {
     }
 
-    public Persona(int id, String nombre) {
-        this.id = id;
+    public Persona(String id, String nombre, String numeroTelefono, String email) {
+        this.numeroId = id;
         this.nombre = nombre;
+        this.numeroTelefono = numeroTelefono;
+        this.email = email;
     }
     
-    // 3. Get & Set (Encapsulamiento)
-    public int getId() {
-        return id;
+    public String getNumeroId() {
+        return numeroId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setNumeroId(String id) {
+        this.numeroId = id;
     }
 
     public String getNombre() {
@@ -30,15 +32,29 @@ public class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     
-    // 4. To String (Override)
     @Override
     public String toString() {
-        return "Id: " + id + " Nombre=" + nombre;
+        return "Id: " + numeroId + " Nombre=" + nombre;
     }
     
     public String toInforme(){
-        return "Id: " + id + " Nombre=" + nombre+"\n";
-    }
-           
+        return "Id: " + numeroId + " Nombre=" + nombre+"\n";
+    }           
 }

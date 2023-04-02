@@ -9,8 +9,8 @@ import Modelo.Vehiculo;
 
 public class VehiculosController implements CrudInterfaces {
 
-    MetodosController metodos = new MetodosController();
-    private static List<Vehiculo> listaVehiculos = new ArrayList();
+    UtilsController metodos = new UtilsController();
+    private static List<Vehiculo> vehiculos = new ArrayList();
 
     @Override
     public void Crear() {
@@ -28,32 +28,32 @@ public class VehiculosController implements CrudInterfaces {
             estilo = JOptionPane.showInputDialog("Ingrese el estilo del vehículo: ");
             modelo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el modelo del vehículo: "));
             color = JOptionPane.showInputDialog("Ingrese el color del vehículo: ");
-            precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el preciodel vehículo: "));
+            precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el precio del vehículo: "));
 
             Vehiculo auto = new Vehiculo(numeroChasis, marca, estilo, modelo, color, precio);
-            listaVehiculos.add(auto);
+            vehiculos.add(auto);
         } else {
             menuVehiculos();
         }
     }
 
     @Override
-    public void Buscar() {
+    public void Ver() {
         String chasis = "";
         int indexVehiculo = -1;
         try {
             chasis = JOptionPane.showInputDialog("Ingrese el número de chasis del vehículo: ");
 
-            indexVehiculo = obtenerIndiceDeVehiculoPorChasis(chasis);
+            indexVehiculo = buscarIndicePorChasis(chasis);
 
             if (indexVehiculo != -1) {
                 String info = "";
-                String numeroChasis = listaVehiculos.get(indexVehiculo).getNumeroChasis();
-                String marca = listaVehiculos.get(indexVehiculo).getMarca();
-                String estilo = listaVehiculos.get(indexVehiculo).getEstilo();
-                int modelo = listaVehiculos.get(indexVehiculo).getModelo();
-                String color = listaVehiculos.get(indexVehiculo).getColor();
-                double precio = listaVehiculos.get(indexVehiculo).getPrecio();
+                String numeroChasis = vehiculos.get(indexVehiculo).getNumeroChasis();
+                String marca = vehiculos.get(indexVehiculo).getMarca();
+                String estilo = vehiculos.get(indexVehiculo).getEstilo();
+                int modelo = vehiculos.get(indexVehiculo).getModelo();
+                String color = vehiculos.get(indexVehiculo).getColor();
+                double precio = vehiculos.get(indexVehiculo).getPrecio();
 
                 info = info + ("El número de chasis del vehículo es: " + numeroChasis
                         + "\nLa marca del vehículo es: " + marca
@@ -78,15 +78,15 @@ public class VehiculosController implements CrudInterfaces {
         try {
             chasis = JOptionPane.showInputDialog("Ingrese el número de chasis del vehículo: ");
 
-            indexAutos = obtenerIndiceDeVehiculoPorChasis(chasis);
+            indexAutos = buscarIndicePorChasis(chasis);
 
             if (indexAutos != -1) {
-                String numeroChasis = listaVehiculos.get(indexAutos).getNumeroChasis();
-                String marca = listaVehiculos.get(indexAutos).getMarca();
-                String estilo = listaVehiculos.get(indexAutos).getEstilo();
-                int modelo = listaVehiculos.get(indexAutos).getModelo();
-                String color = listaVehiculos.get(indexAutos).getColor();
-                double precio = listaVehiculos.get(indexAutos).getPrecio();
+                String numeroChasis = vehiculos.get(indexAutos).getNumeroChasis();
+                String marca = vehiculos.get(indexAutos).getMarca();
+                String estilo = vehiculos.get(indexAutos).getEstilo();
+                int modelo = vehiculos.get(indexAutos).getModelo();
+                String color = vehiculos.get(indexAutos).getColor();
+                double precio = vehiculos.get(indexAutos).getPrecio();
 
                 numeroChasis = JOptionPane.showInputDialog("El nuevo número de chasis es: ", numeroChasis);
                 marca = JOptionPane.showInputDialog("La nueva marca del vehículo es: ", marca);
@@ -95,12 +95,12 @@ public class VehiculosController implements CrudInterfaces {
                 modelo = Integer.parseInt(JOptionPane.showInputDialog("El nuevo modelo del vehículo es: ", modelo));
                 precio = Double.parseDouble(JOptionPane.showInputDialog("El nuevo precio del vehículo es: ", precio));
 
-                listaVehiculos.get(indexAutos).setNumeroChasis(numeroChasis);//TODO: verificar si esto es valido
-                listaVehiculos.get(indexAutos).setMarca(marca);
-                listaVehiculos.get(indexAutos).setEstilo(estilo);
-                listaVehiculos.get(indexAutos).setColor(color);
-                listaVehiculos.get(indexAutos).setModelo(modelo);
-                listaVehiculos.get(indexAutos).setPrecio(precio);
+                vehiculos.get(indexAutos).setNumeroChasis(numeroChasis);//TODO: verificar si esto es valido
+                vehiculos.get(indexAutos).setMarca(marca);
+                vehiculos.get(indexAutos).setEstilo(estilo);
+                vehiculos.get(indexAutos).setColor(color);
+                vehiculos.get(indexAutos).setModelo(modelo);
+                vehiculos.get(indexAutos).setPrecio(precio);
 
                 JOptionPane.showMessageDialog(null, "Modificación realizada con éxito");
 
@@ -113,20 +113,20 @@ public class VehiculosController implements CrudInterfaces {
     }
 
     @Override
-    public void Eliminar() {
+    public void Eliminar() {//TODO: validar si el vehiculo ya esta alquilado
         String chasis = "";
         int indexVehiculo = -1;
 
         try {
             chasis = JOptionPane.showInputDialog("Ingrese el número de chasis del vehículo: ");
 
-            indexVehiculo = obtenerIndiceDeVehiculoPorChasis(chasis);
+            indexVehiculo = buscarIndicePorChasis(chasis);
 
             if (indexVehiculo != -1) {
-                String numeroChasis = listaVehiculos.get(indexVehiculo).getNumeroChasis();
+                String numeroChasis = vehiculos.get(indexVehiculo).getNumeroChasis();
                 numeroChasis = JOptionPane.showInputDialog("El número de chasis a eliminar es: ", numeroChasis);
 
-                listaVehiculos.remove(indexVehiculo);//.setNumeroChasis(numeroChasis);//TODO: porque se hace un SET si quiero eliminar?
+                vehiculos.remove(indexVehiculo);//.setNumeroChasis(numeroChasis);//TODO: porque se hace un SET si quiero eliminar?
             } else {
                 JOptionPane.showMessageDialog(null, String.format("El número de chasis %s no se encuentra registrado", chasis));
             }
@@ -145,7 +145,7 @@ public class VehiculosController implements CrudInterfaces {
                     Crear();
                     break;
                 case 1:
-                    Buscar();
+                    Ver();
                     break;
                 case 2:
                     Modificar();
@@ -168,14 +168,38 @@ public class VehiculosController implements CrudInterfaces {
     public void Informe() {
     }
     
-    private int obtenerIndiceDeVehiculoPorChasis(String chasis){
+    public int buscarIndicePorChasis(String chasis){
         int indexVehiculo = -1;
-        for (int i = 0; i < listaVehiculos.size(); i++) {
-            if (listaVehiculos.get(i).getNumeroChasis().equals(chasis)) {
+        for (int i = 0; i < vehiculos.size(); i++) {
+            if (vehiculos.get(i).getNumeroChasis().equals(chasis)) {
                 indexVehiculo = i;
                 break;
             }
         }
         return indexVehiculo;
+    }
+    
+    public Vehiculo buscarPorChasis(String chasis){
+        Vehiculo vehiculo = new Vehiculo();
+        for (Vehiculo v : vehiculos) {
+            if (v.getNumeroChasis().equals(chasis)) {
+                vehiculo = v;
+                break;
+            }
+        }
+
+        return vehiculo;
+    }
+    
+    public Boolean existeChasis(String chasis) {
+        boolean existe = false;
+        for (Vehiculo vehiculo : vehiculos) {
+            if (vehiculo.getNumeroChasis().equals(chasis)) {
+                existe = true;
+                break;
+            }
+        }
+
+        return existe;
     }
 }

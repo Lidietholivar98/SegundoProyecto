@@ -2,11 +2,12 @@ package Main;
 
 import Controladores.VehiculosController;
 import Controladores.PersonasController;
-import Controladores.MetodosController;
+import Controladores.UtilsController;
 import Controladores.VentasController;
+import javax.swing.JOptionPane;
 
 public class Inicio {
-    public static MetodosController metodos = new MetodosController();
+    public static UtilsController metodos = new UtilsController();
     public static VehiculosController autos = new VehiculosController();
     public static PersonasController personas = new PersonasController();
     public static VentasController ventas = new VentasController();
@@ -23,23 +24,21 @@ public class Inicio {
             switch (opcion) {
                 case 0:   
                     autos.menuVehiculos();
-               
-                    
                     break;
                 case 1: 
                     personas.menuPersonas();
                     break;
                 case 2:  
-                    ventas.menuPersonas();
+                    ventas.menuVentas();
                     break;
                 case 3:
-                    int salir = metodos.SIoNo("Realmente desea salir?", "Atención");
-                    if (salir==1){
-                        opcion=-1;
+                    int salir = metodos.SIoNo("¿Realmente desea salir?", "Atención");
+                    if (salir == JOptionPane.YES_NO_OPTION){
+                        metodos.msg("Gracias por utilizar nuestro sistema");
+                        System.exit(0);
                     }
                     else{
-                        metodos.msg("Gracias por su visita...");
-                        System.exit(0);
+                        opcion= -1;
                     }
             }
         }
