@@ -6,34 +6,123 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import Modelo.Vehiculo;
+import java.time.LocalDate;
 
 public class VehiculosController implements CrudInterfaces {
 
     UtilsController metodos = new UtilsController();
     private static List<Vehiculo> vehiculos = new ArrayList();
+    
+    public void CargarDatos() {
+        Vehiculo v1 = new Vehiculo("ABC123", "Suzuki", "Vitara", 2020, "Gris", 9800000);
+        Vehiculo v2 = new Vehiculo("ABC456", "Suzuki", "Grand Vitara", 2020, "Gris", 6800000);
+        Vehiculo v3 = new Vehiculo("ABC789", "Suzuki", "Ciaz", 2020, "Gris", 4800000);
+        vehiculos.add(v1);
+        vehiculos.add(v2);
+        vehiculos.add(v3);
+    }
 
     @Override
     public void Crear() {
-        String numeroChasis;
-        String marca;
-        String estilo;
-        int modelo;
-        String color;
-        double precio;
-
-        numeroChasis = JOptionPane.showInputDialog("Ingrese el número de chasis del vehículo: ");
-
-        if (numeroChasis.length() > 0) {
+        String numeroChasis= "";
+        String marca= "";
+        int modelo = 0;
+        String estilo= "";
+        String color= "";
+        double precio= 0.0;
+        
+        Boolean chasisValido = false;
+        while(!chasisValido){
+            try{
+                numeroChasis = JOptionPane.showInputDialog("Ingrese el número de chasis del vehículo: ");//TODO: agregar un consecutivo de vehiculo para usarlo en lugar de buscar por chasis
+                if(numeroChasis.isEmpty()){
+                    metodos.mensajeAlerta("Debe ingresar un número de chasis válido");
+                }
+                else if(existeChasis(numeroChasis)){
+                    metodos.mensajeAlerta("Este número de chasis ya se encuentra registrado");
+                }
+                else{
+                    chasisValido = true;
+                }
+            } catch(Exception e){
+                metodos.mensajeAlerta("Debe ingresar un número de chasis válido");
+            }
+        }
+        
+        Boolean marcaValida = false;
+        while (!marcaValida) {
             marca = JOptionPane.showInputDialog("Ingrese la marca del vehículo: ");
+            if (marca.isEmpty()) {
+                metodos.mensajeAlerta("Debe ingresar una marca válida");
+            } else {
+                marcaValida = true;
+            }
+        }
+        
+        Boolean estiloValido = false;
+        while (!estiloValido) {
             estilo = JOptionPane.showInputDialog("Ingrese el estilo del vehículo: ");
-            modelo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el modelo del vehículo: "));
+            if (estilo.isEmpty()) {
+                metodos.mensajeAlerta("Debe ingresar un estilo válido");
+            } else {
+                estiloValido = true;
+            }
+        }
+        
+        Boolean modeloValido = false;
+        LocalDate fechaActual = LocalDate.now();
+        String modeloStr= "";
+        Boolean esSuperiorAnioActual= false;
+        while(!modeloValido){
+            modeloStr = JOptionPane.showInputDialog("Ingrese el modelo del vehículo: ");
+            if(!esEntero(modeloStr)){
+                metodos.mensajeAlerta("Debe ingresar un número entero");
+            }
+            else{
+                modelo = Integer.parseInt(modeloStr);
+                esSuperiorAnioActual = modelo > fechaActual.getYear();
+                if (modelo < 0 || modelo == 0 || esSuperiorAnioActual) {
+                    metodos.mensajeAlerta("Debe ingresar un modelo válido");
+                } else {
+                    modeloValido = true;
+                }                
+            }
+        }
+        
+        Boolean colorValido = false;
+        while (!colorValido) {
             color = JOptionPane.showInputDialog("Ingrese el color del vehículo: ");
+            if (color.isEmpty()) {
+                metodos.mensajeAlerta("Debe ingresar un color válido");
+            } else {
+                colorValido = true;
+            }
+        }
+        
+        Boolean precioValido = false;
+        while(!precioValido){
             precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el precio del vehículo: "));
+            if(precio <= 0){
+                metodos.mensajeAlerta("Debe ingresar un precio válido");
+            }
+            else {
+                precioValido = true;
+            }
+        }
 
-            Vehiculo auto = new Vehiculo(numeroChasis, marca, estilo, modelo, color, precio);
-            vehiculos.add(auto);
-        } else {
-            menuVehiculos();
+        Vehiculo vehiculo = new Vehiculo(numeroChasis, marca, estilo, modelo, color, precio);
+        
+        String msg = "Número de chasis: " + vehiculo.getNumeroChasis()
+                   + "\nMarca: " + vehiculo.getMarca()
+                   + "\nModelo: " + vehiculo.getModelo()
+                   + "\nEstilo: " + vehiculo.getEstilo()
+                   + "\nColor: " + vehiculo.getColor()
+                   + "\nPrecio: " + vehiculo.getPrecio();
+        String titulo = "Validación de datos";
+        int resp = metodos.mensajeConfirmacionSIoNo(msg, titulo);
+        
+        if (resp == JOptionPane.YES_NO_OPTION) {
+            vehiculos.add(vehiculo);
         }
     }
 
@@ -62,12 +151,12 @@ public class VehiculosController implements CrudInterfaces {
                         + "\nEl modelo del vehículo es: " + modelo
                         + "\nEl costo del vehículo es: " + precio + "\n\n");
 
-                JOptionPane.showMessageDialog(null, info, "Información del vehículo", JOptionPane.NO_OPTION);
+                 metodos.mensajeInformacion(info, "Información del vehículo");
             } else {
-                JOptionPane.showMessageDialog(null, String.format("El número de chasis %s no se encuentra registrado", chasis));
+                metodos.mensajeAlerta(String.format("El número de chasis %s no se encuentra registrado", chasis));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error en la búsqueda del vehículo");
+            metodos.mensajeAlerta("Hubo un error en la búsqueda del vehículo");
         }
     }
 
@@ -102,36 +191,42 @@ public class VehiculosController implements CrudInterfaces {
                 vehiculos.get(indexAutos).setModelo(modelo);
                 vehiculos.get(indexAutos).setPrecio(precio);
 
-                JOptionPane.showMessageDialog(null, "Modificación realizada con éxito");
+                 metodos.mensajeInformacion("Modificación realizada con éxito", "Modificación vehículo");
 
             } else {
-                JOptionPane.showMessageDialog(null, String.format("El número de chasis %s no se encuentra registrado", chasis));
+                 metodos.mensajeAlerta(String.format("El número de chasis %s no se encuentra registrado", chasis));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error en la modificación del vehículo");
+            metodos.mensajeAlerta("Hubo un error en la modificación del vehículo");
         }
     }
 
     @Override
-    public void Eliminar() {//TODO: validar si el vehiculo ya esta alquilado
+    public void Eliminar() {
         String chasis = "";
         int indexVehiculo = -1;
 
         try {
             chasis = JOptionPane.showInputDialog("Ingrese el número de chasis del vehículo: ");
-
             indexVehiculo = buscarIndicePorChasis(chasis);
 
             if (indexVehiculo != -1) {
-                String numeroChasis = vehiculos.get(indexVehiculo).getNumeroChasis();
-                numeroChasis = JOptionPane.showInputDialog("El número de chasis a eliminar es: ", numeroChasis);
-
-                vehiculos.remove(indexVehiculo);//.setNumeroChasis(numeroChasis);//TODO: porque se hace un SET si quiero eliminar?
+                Vehiculo vehiculo = vehiculos.get(indexVehiculo);
+                if(!vehiculo.estaAlquilado()){
+                    int opcion = metodos.mensajeConfirmacionSIoNo(vehiculo.toString(), "¿Desea eliminar el vehículo?");
+                    if(opcion == JOptionPane.YES_NO_OPTION){
+                        vehiculos.remove(indexVehiculo);
+                        metodos.mensajeInformacion("Vehículo eliminado correctamente", "Eliminación vehículos");
+                    }
+                }
+                else{
+                    metodos.mensajeAlerta("El vehículo se encuentra alquilado actualmente, no puede ser eliminado");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, String.format("El número de chasis %s no se encuentra registrado", chasis));
+                metodos.mensajeInformacion(String.format("El número de chasis %s no se encuentra registrado", chasis));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error en la eliminación del vehículo");
+            metodos.mensajeAlerta("Hubo un error en la eliminación del vehículo");
         }
     }
 
@@ -139,7 +234,7 @@ public class VehiculosController implements CrudInterfaces {
         String[] opciones = {"Registrar", "Consultar", "Modificar", "Eliminar", "Volver"};
         int opcion = -1;
         while (opcion != opciones.length - 1) {
-            opcion = metodos.menuBotones("Seleccione una opción", "Vehiculos", opciones, "Volver");
+            opcion = metodos.menuBotones("Seleccione una opción", "Vehículos", opciones, "Volver");
             switch (opcion) {
                 case 0:
                     Crear();
@@ -201,5 +296,15 @@ public class VehiculosController implements CrudInterfaces {
         }
 
         return existe;
+    }
+    
+    public boolean esEntero(String texto) {
+        int valor;
+        try {
+            valor = Integer.parseInt(texto);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
     }
 }

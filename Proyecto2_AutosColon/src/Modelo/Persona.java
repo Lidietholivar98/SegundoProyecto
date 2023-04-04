@@ -2,27 +2,29 @@ package Modelo;
 
 public class Persona {
 
-    private String numeroId;
+    private String numeroIdentificacion;
     private String nombre;
     private String numeroTelefono;
     private String email;
+    private Boolean poseeAlquiler;
     
     public Persona() {
     }
 
-    public Persona(String id, String nombre, String numeroTelefono, String email) {
-        this.numeroId = id;
+    public Persona(String identificacion, String nombre, String numeroTelefono, String email) {
+        this.numeroIdentificacion = identificacion;
         this.nombre = nombre;
         this.numeroTelefono = numeroTelefono;
         this.email = email;
+        this.poseeAlquiler = false;
     }
     
-    public String getNumeroId() {
-        return numeroId;
+    public String getNumeroIdentificacion() {
+        return numeroIdentificacion;
     }
 
-    public void setNumeroId(String id) {
-        this.numeroId = id;
+    public void setNumeroIdentificacion(String identificacion) {
+        this.numeroIdentificacion = identificacion;
     }
 
     public String getNombre() {
@@ -49,12 +51,27 @@ public class Persona {
         this.email = email;
     }
     
-    @Override
-    public String toString() {
-        return "Id: " + numeroId + " Nombre=" + nombre;
+    public void marcarComoAlquilando(){
+        this.poseeAlquiler = true;
     }
     
-    public String toInforme(){
-        return "Id: " + numeroId + " Nombre=" + nombre+"\n";
-    }           
+    public void marcarComoSinAlquiler(){
+        this.poseeAlquiler = false;
+    }
+    
+    public Boolean estaAlquilando(){
+        return poseeAlquiler;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**** Información de la persona ****");
+        sb.append("\nIdentificación: ").append(numeroIdentificacion);
+        sb.append("\nNombre: ").append(nombre);
+        sb.append("\nTeléfono: ").append(numeroTelefono);
+        sb.append("\nCorreo electrónico: ").append(email);
+        sb.append("\n--------\n");
+        return sb.toString();
+    }
 }

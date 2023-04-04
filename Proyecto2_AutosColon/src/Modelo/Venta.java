@@ -4,28 +4,42 @@
  */
 package Modelo;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author aaraya
  */
 public class Venta {
+    private int numeroVenta;
+    private static int nuevoId;
     private String numeroChasis;
     private String idComprador;
     private double precioVenta;
-    private String fechaVenta;
+    private LocalDate fechaVenta;
     private static final int IVA = 13;
     private double totalVenta;
     
     public Venta(){
         
     }
+    
+    public static void setNumeroVenta() {
+        nuevoId++;
+    }
 
-    public Venta(String numeroChasis, String idComprador, double precioVenta, String fechaVenta, double totalVenta) {
+    public Venta(String numeroChasis, String idComprador, double precioVenta, LocalDate fechaVenta) {
+        setNumeroVenta();
+        this.numeroVenta = nuevoId;
         this.numeroChasis = numeroChasis;
         this.idComprador = idComprador;
         this.precioVenta = precioVenta;
         this.fechaVenta = fechaVenta;
-        this.totalVenta = totalVenta;
+        this.totalVenta = precioVenta * (IVA/100.0);
+    }
+    
+    public int getNumeroVenta(){
+        return numeroVenta;
     }
 
     public String getNumeroChasis() {
@@ -52,11 +66,15 @@ public class Venta {
         this.precioVenta = precioVenta;
     }
 
-    public String getFechaVenta() {
+    public LocalDate getFechaVenta() {
         return fechaVenta;
     }
+    
+    public String getFechaVentaAsStr() {
+        return fechaVenta.getDayOfMonth() + "/" + fechaVenta.getMonth() + "/" + fechaVenta.getYear();
+    }
 
-    public void setFechaVenta(String fechaVenta) {
+    public void setFechaVenta(LocalDate fechaVenta) {
         this.fechaVenta = fechaVenta;
     }
 
@@ -66,5 +84,23 @@ public class Venta {
 
     public void setTotalVenta(double totalVenta) {
         this.totalVenta = totalVenta;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**** Información de la venta # ").append(numeroVenta).append("****");
+        sb.append("\nVehículo: ").append(numeroChasis);
+        sb.append("\nIdentificador comprador: ").append(idComprador);
+        sb.append("\nFecha de venta: ")
+                .append(fechaVenta.getDayOfMonth())
+                .append('/')
+                .append(fechaVenta.getMonth())
+                .append('/')
+                .append(fechaVenta.getYear());
+        sb.append("\nPrecio de venta: ").append(precioVenta);
+        sb.append("\nTotal de venta: ").append(totalVenta);
+        sb.append("\n--------\n");
+        return sb.toString();
     }
 }

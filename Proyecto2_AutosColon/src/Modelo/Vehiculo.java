@@ -8,11 +8,12 @@ public class Vehiculo {
     private int numeroVehiculo;
     private String numeroChasis;
     private String marca;
-    private String estilo;
     private int modelo;
+    private String estilo;    
     private String color;
     private double precio;
-    private static int nuevoNumeroVehiculo;   
+    private static int nuevoNumeroVehiculo;
+    private Boolean estaAlquilado;
 
     public Vehiculo() {}
 
@@ -29,6 +30,7 @@ public class Vehiculo {
         this.modelo = modelo;
         this.color = color;
         this.precio = precio;
+        this.estaAlquilado = false;
     }
     
     public int getNumeroVehiculo() {
@@ -85,5 +87,31 @@ public class Vehiculo {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+    
+    public void marcarComoAlquilado(){
+        this.estaAlquilado = true;
+    }
+    
+    public void marcarComoDevuelto(){
+        this.estaAlquilado = false;
+    }
+    
+    public Boolean estaAlquilado(){
+        return estaAlquilado;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**** Información del vehículo ****");
+        sb.append("\nNúmero de chasis: ").append(numeroChasis);
+        sb.append("\nMarca: ").append(marca);
+        sb.append("\nModelo: ").append(modelo);
+        sb.append("\nEstilo: ").append(estilo);
+        sb.append("\nColor: ").append(color);
+        sb.append("\nPrecio: ").append(precio);//TODO: darle formato de numero con todos los digitos
+        sb.append("\n--------\n");
+        return sb.toString();
     }
 }

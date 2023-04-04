@@ -1,6 +1,5 @@
 package Controladores;
 
-//Implementar los métodos abstractos de la interface.
 import Interfaces.CrudInterfaces;
 import static Main.Inicio.menuPrincipal;
 import Modelo.Persona;
@@ -8,33 +7,42 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-//Usamos implements
-//Implementar los métodos abstractos
 public class PersonasController implements CrudInterfaces {
 
-    //Implementa la clase MetodosController (Copia)
     UtilsController metodos = new UtilsController();
     private static List<Persona> personas = new ArrayList();
 
+    public void CargarDatos() {
+        Persona p1 = new Persona("111111111", "Nombre Uno", "55555555", "test1@gmail.com");
+        Persona p2 = new Persona("222222222", "Nombre Dos", "88888888", "test2@gmail.com");
+        Persona p3 = new Persona("333333333", "Nombre Tres", "99999999", "tes3@hotmail.com");
+        personas.add(p1);
+        personas.add(p2);
+        personas.add(p3);
+    }
+    
     @Override
     public void Crear() {
         String numeroId = "";
         String nombre = "";
-        String numeroTelefono;
-        String email;
+        String numeroTelefono= "";
+        String email = "";
         
         Boolean identificadorValido = false;
         while(!identificadorValido){
             try{
                 numeroId = JOptionPane.showInputDialog("Ingrese el número de identificación: ");
-                if(existeIdentificador(numeroId)){
-                    metodos.msg("Este identificador ya se encuentra registrado");
+                if(numeroId.isEmpty()){
+                    metodos.mensajeAlerta("Debe ingresar una identificación válida");
+                }
+                else if(existeIdentificador(numeroId)){
+                    metodos.mensajeAlerta("Esta identificación ya se encuentra registrada");
                 }
                 else{
                     identificadorValido = true;
                 }
             } catch(Exception e){
-                metodos.msg("Debe ingresar una identificación válida");
+                metodos.mensajeAlerta("Debe ingresar una identificación válida");
             }
         }
 
@@ -42,26 +50,41 @@ public class PersonasController implements CrudInterfaces {
         while (!nombreValido) {
             nombre = JOptionPane.showInputDialog("Ingrese el nombre: ");
             if (nombre.isEmpty()) {
-                metodos.msg("Debe ingresar un nombre válido");
+                metodos.mensajeAlerta("Debe ingresar un nombre válido");
             } else {
                 nombreValido = true;
             }
         }
         
-        numeroTelefono = JOptionPane.showInputDialog("Ingrese el número de teléfono: ");
-        email = JOptionPane.showInputDialog("Ingrese el correo electrónico: ");//TODO: validar formato de correo
+        Boolean numeroTelefonoValido = false;
+        while (!numeroTelefonoValido) {
+            numeroTelefono = JOptionPane.showInputDialog("Ingrese el número de teléfono: ");
+            if (numeroTelefono.isEmpty()) {
+                metodos.mensajeAlerta("Debe ingresar un número de teléfono válido");
+            } else {
+                numeroTelefonoValido = true;
+            }
+        }
+        
+        Boolean esCorreoValido = false;
+        while (!esCorreoValido){
+            email = JOptionPane.showInputDialog("Ingrese el correo electrónico: ");
+            esCorreoValido = metodos.esCorreoValido(email);
+            if(!esCorreoValido){
+                metodos.mensajeAlerta("Debe ingresar un correo válido");
+            }
+        }
 
         Persona persona = new Persona(numeroId, nombre, numeroTelefono, email);
         
-        int resp;
-        String msg = "Identificador: " + persona.getNumeroId() 
+        String msg = "Identificación: " + persona.getNumeroIdentificacion() 
                    + "\nNombre: " + persona.getNombre()
                    + "\nNúmero teléfono: " + persona.getNumeroTelefono()
                    + "\nCorreo electrónico: " + persona.getEmail();
         String titulo = "Validación de datos";
-        resp = metodos.SIoNo(msg, titulo);
+        int resp = metodos.mensajeConfirmacionSIoNo(msg, titulo);
         
-        if (resp == 0) {
+        if (resp == JOptionPane.YES_NO_OPTION) {
             personas.add(persona);
         }
     }
@@ -76,7 +99,7 @@ public class PersonasController implements CrudInterfaces {
 
             if (indexPersona != -1) {
                 String info = "";
-                String numeroId = personas.get(indexPersona).getNumeroId();
+                String numeroId = personas.get(indexPersona).getNumeroIdentificacion();
                 String nombre = personas.get(indexPersona).getNombre();
                 String numeroTelefono = personas.get(indexPersona).getNumeroTelefono();
                 String email = personas.get(indexPersona).getEmail();
@@ -86,12 +109,12 @@ public class PersonasController implements CrudInterfaces {
                         + "\nEl número de teléfono es: " + numeroTelefono
                         + "\nEl correo electrónico es: " + email + "\n\n");
 
-                JOptionPane.showMessageDialog(null, info, "Información de la persona", JOptionPane.NO_OPTION);
+                metodos.mensajeInformacion(info, "Información de la persona");
             } else {
-                JOptionPane.showMessageDialog(null, String.format("El número de identificación %s no se encuentra registrado", identificacion));
+                metodos.mensajeAlerta(String.format("El número de identificación %s no se encuentra registrado", identificacion));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error en la búsqueda de la persona");
+            metodos.mensajeAlerta("Hubo un error en la búsqueda de la persona");
         }
     }
 
@@ -104,7 +127,7 @@ public class PersonasController implements CrudInterfaces {
             indexPersona = buscarIndicePorId(identificacion);
 
             if (indexPersona != -1) {
-                String numeroIdentificacion = personas.get(indexPersona).getNumeroId();
+                String numeroIdentificacion = personas.get(indexPersona).getNumeroIdentificacion();
                 String nombre = personas.get(indexPersona).getNombre();
                 String numeroTelefono = personas.get(indexPersona).getNumeroTelefono();
                 String email = personas.get(indexPersona).getEmail();
@@ -114,23 +137,23 @@ public class PersonasController implements CrudInterfaces {
                 numeroTelefono = JOptionPane.showInputDialog("El nuevo número de teléfono es : ", numeroTelefono);
                 email = JOptionPane.showInputDialog("El nuevo correo electrónico es: ", email);
 
-                personas.get(indexPersona).setNumeroId(numeroIdentificacion);//TODO: verificar si esto es valido
+                personas.get(indexPersona).setNumeroIdentificacion(numeroIdentificacion);//TODO: verificar si esto es valido
                 personas.get(indexPersona).setNombre(nombre);
                 personas.get(indexPersona).setNumeroTelefono(numeroTelefono);
                 personas.get(indexPersona).setEmail(email);
                 
-                JOptionPane.showMessageDialog(null, "Modificación realizada con éxito");
+                metodos.mensajeInformacion("Modificación realizada con éxito", "Modificación persona");
 
             } else {
-                JOptionPane.showMessageDialog(null, String.format("El número de identificación %s no se encuentra registrado", identificacion));
+                metodos.mensajeAlerta(String.format("El número de identificación %s no se encuentra registrado", identificacion));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error en la modificación de la persona");
+            metodos.mensajeAlerta("Hubo un error en la modificación de la persona");
         }
     }
     
     @Override
-    public void Eliminar() {//TODO: validar si la persona tiene alquileres
+    public void Eliminar() {
         String identificacion = "";
         int indexPersona = -1;
 
@@ -139,15 +162,22 @@ public class PersonasController implements CrudInterfaces {
             indexPersona = buscarIndicePorId(identificacion);
 
             if (indexPersona != -1) {
-                String numeroIdentificador = personas.get(indexPersona).getNumeroId();
-                numeroIdentificador = JOptionPane.showInputDialog("El número de identificación a eliminar es: ", numeroIdentificador);
-
-                personas.remove(indexPersona);
+                Persona persona = personas.get(indexPersona);
+                if(!persona.estaAlquilando()){
+                    int opcion = metodos.mensajeConfirmacionSIoNo(persona.toString(), "¿Desea eliminar a la persona?");
+                    if(opcion == JOptionPane.YES_NO_OPTION){
+                        personas.remove(indexPersona);
+                        metodos.mensajeInformacion("Persona eliminada correctamente", "Eliminación persona");
+                    }
+                }
+                else{
+                    metodos.mensajeAlerta("La persona posee un alquiler actualmente, por lo tanto, no puede ser eliminada");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, String.format("El número de identificación %s no se encuentra registrado", identificacion));
+                metodos.mensajeAlerta(String.format("El número de identificación %s no se encuentra registrado", identificacion));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error en la eliminación de la persona");
+            metodos.mensajeAlerta("Hubo un error en la eliminación de la persona");
         }
     }
     
@@ -185,21 +215,11 @@ public class PersonasController implements CrudInterfaces {
     public void Informe() {
 
     }
-
-    public boolean poseeAlquiler(String idPersona) {
-        //Aquí va el código que busca en la lista de alquileres una persona
-        boolean existe = buscarIndicePorId(idPersona) != -1;//metodos.SIoNo("Esta alquilando?", "Atención");
-        if (existe) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     
     public int buscarIndicePorId(String identificador){
         int indexPersona = -1;
         for (int i = 0; i < personas.size(); i++) {
-            if (personas.get(i).getNumeroId().equals(identificador)) {
+            if (personas.get(i).getNumeroIdentificacion().equals(identificador)) {
                 indexPersona = i;
                 break;
             }
@@ -210,7 +230,7 @@ public class PersonasController implements CrudInterfaces {
     public Persona buscarPorId(String identificador){
         Persona persona = new Persona();
         for (Persona p : personas) {
-            if (p.getNumeroId().equals(identificador)) {
+            if (p.getNumeroIdentificacion().equals(identificador)) {
                 persona = p;
                 break;
             }
@@ -234,7 +254,7 @@ public class PersonasController implements CrudInterfaces {
     public Boolean existeIdentificador(String identificador) {
         boolean existe = false;
         for (Persona persona : personas) {
-            if (persona.getNumeroId().equals(identificador)) {
+            if (persona.getNumeroIdentificacion().equals(identificador)) {
                 existe = true;
                 break;
             }
