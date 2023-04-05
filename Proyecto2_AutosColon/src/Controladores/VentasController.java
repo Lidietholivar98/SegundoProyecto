@@ -73,8 +73,23 @@ public class VentasController implements CrudInterfaces {
     
     @Override
     public void Ver() {
-        int idVenta;
-        idVenta = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de la venta:"));
+        String idVentaStr = "";
+        int idVenta = -1;
+        
+        Boolean idVentaValido = false;
+        while (!idVentaValido) {
+            idVentaStr = JOptionPane.showInputDialog("Ingrese el número de la venta:");
+            if (!esEntero(idVentaStr)) {
+                metodos.mensajeAlerta("Debe ingresar un número entero");
+            } else {
+                idVenta = Integer.parseInt(idVentaStr);
+                if (idVenta <= 0) {
+                    metodos.mensajeAlerta("Debe ingresar una venta válida");
+                } else {
+                    idVentaValido = true;
+                }
+            }
+        }
 
         try {
             for (Venta venta : ventas){
@@ -243,5 +258,15 @@ public class VentasController implements CrudInterfaces {
             }
         }
         return indexVenta;
+    }
+    
+     public boolean esEntero(String texto) {
+        int valor;
+        try {
+            valor = Integer.parseInt(texto);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
     }
 }
