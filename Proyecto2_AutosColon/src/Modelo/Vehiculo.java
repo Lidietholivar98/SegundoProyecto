@@ -4,6 +4,9 @@
  */
 package Modelo;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Vehiculo {
     private int numeroVehiculo;
     private String numeroChasis;
@@ -104,13 +107,14 @@ public class Vehiculo {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CR"));
         sb.append("**** Información del vehículo ****");
         sb.append("\nNúmero de chasis: ").append(numeroChasis);
         sb.append("\nMarca: ").append(marca);
         sb.append("\nModelo: ").append(modelo);
         sb.append("\nEstilo: ").append(estilo);
         sb.append("\nColor: ").append(color);
-        sb.append("\nPrecio: ").append(precio);//TODO: darle formato de numero con todos los digitos
+        sb.append("\nPrecio: ").append(formatoMoneda.format(precio));
         sb.append("\n--------\n");
         return sb.toString();
     }

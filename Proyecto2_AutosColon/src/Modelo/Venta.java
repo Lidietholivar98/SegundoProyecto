@@ -4,7 +4,9 @@
  */
 package Modelo;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 
 /**
  *
@@ -18,7 +20,8 @@ public class Venta {
     private double precioVenta;
     private LocalDate fechaVenta;
     private static final int IVA = 13;
-    private double totalVenta;
+    private double totalIVA;
+    private double totalVentaConIVA;
     
     public Venta(){
         
@@ -35,7 +38,8 @@ public class Venta {
         this.idComprador = idComprador;
         this.precioVenta = precioVenta;
         this.fechaVenta = fechaVenta;
-        this.totalVenta = precioVenta * (IVA/100.0);
+        this.totalIVA = precioVenta * (IVA/100.0);
+        this.totalVentaConIVA = precioVenta + totalIVA;
     }
     
     public int getNumeroVenta(){
@@ -78,17 +82,18 @@ public class Venta {
         this.fechaVenta = fechaVenta;
     }
 
-    public double getTotalVenta() {
-        return totalVenta;
+    public double getTotalVentaConIVA() {
+        return totalVentaConIVA;
     }
 
-    public void setTotalVenta(double totalVenta) {
-        this.totalVenta = totalVenta;
+    public void setTotalVentaConIVA(double totalVenta) {
+        this.totalVentaConIVA = totalVenta;
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CR"));
         sb.append("**** Información de la venta # ").append(numeroVenta).append("****");
         sb.append("\nVehículo: ").append(numeroChasis);
         sb.append("\nIdentificador comprador: ").append(idComprador);
@@ -98,9 +103,10 @@ public class Venta {
                 .append(fechaVenta.getMonth())
                 .append('/')
                 .append(fechaVenta.getYear());
-        sb.append("\nPrecio de venta: ").append(precioVenta);
-        sb.append("\nTotal de venta: ").append(totalVenta);
+        sb.append("\nPrecio de venta: ").append(formatoMoneda.format(precioVenta));
+        sb.append("\nTotal de IVA: ").append(formatoMoneda.format(totalIVA));
+        sb.append("\nTotal de venta con IVA: ").append(formatoMoneda.format(totalVentaConIVA));
         sb.append("\n--------\n");
         return sb.toString();
-    }
+    }   
 }
