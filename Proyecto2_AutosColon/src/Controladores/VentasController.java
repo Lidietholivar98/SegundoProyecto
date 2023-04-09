@@ -19,7 +19,8 @@ public class VentasController implements CrudInterfaces {
     UtilsController metodos = new UtilsController();
     PersonasController personas = new PersonasController();
     VehiculosController vehiculos = new VehiculosController();
-    private static List<Venta> ventas = new ArrayList();
+    private static  List<Venta> ventas = new ArrayList();
+    
 
     @Override
     public void Crear() {
@@ -60,16 +61,59 @@ public class VentasController implements CrudInterfaces {
         }
         
         Persona persona = personas.buscarPorId(idComprador);
-        Vehiculo vehiculo = vehiculos.buscarPorChasis(numeroChasis);
-        
+        Vehiculo vehiculo = vehiculos.buscarPorChasis(numeroChasis);  
         precioVenta = vehiculo.getPrecio();
-
         Venta venta = new Venta(numeroChasis, idComprador, precioVenta, fechaVenta);
-        ventas.add(venta);
+        String msg = "Identificación: " + venta.getIdComprador()
+                   + "\nNúmero de chasis a vender: " + venta.getNumeroChasis();
+        String titulo = "Validación de datos";
+        int resp = metodos.mensajeConfirmacionSIoNo(msg, titulo);
+        
+        if (resp == JOptionPane.YES_NO_OPTION) {
+          ventas.add(venta);
+        }
         
         vehiculo.marcarComoAlquilado();
         persona.marcarComoAlquilando();
+        
+
     }
+ @Override
+
+    public void Anular() {
+        String idVentaStr = "";
+        int idVenta = -1;
+        
+        Boolean idVentaValido = false; 
+        
+        while (!idVentaValido) {         
+             idVentaStr = JOptionPane.showInputDialog("Ingrese el número de venta que quiere anular:");
+            if (!esEntero(idVentaStr)) {
+                metodos.mensajeAlerta("Debe ingresar un número entero");
+            } else {
+                idVenta = Integer.parseInt(idVentaStr);
+                if (idVenta <= 0) {
+                    metodos.mensajeAlerta("Debe ingresar una venta válida");
+                } else {
+                    idVentaValido = true;
+                }
+            } 
+     }
+   
+        try {
+            for (Venta venta : ventas) {
+                if (venta.getNumeroVenta() == idVenta) {
+                    venta.setAnularVenta(true);
+                    metodos.mensajeInformacion("Venta anulada correctamente");
+                    break;
+                    }
+                }
+            
+        } catch (Exception e) {
+            metodos.mensajeInformacion(String.format("El número de venta %s no se encuentra registrado", idVenta));
+        }
+    }
+
     
     @Override
     public void Ver() {
@@ -92,10 +136,14 @@ public class VentasController implements CrudInterfaces {
         }
 
         try {
-            for (Venta venta : ventas){
+            for (Venta venta : ventas ){
                 if (venta.getNumeroVenta()== idVenta) {
-                    metodos.mensajeInformacion(venta.toString());
-                    break;
+                    if(venta.isAnularVenta() != false){
+                    metodos.mensajeInformacion("Esta venta esta anulada");
+                    }else{
+                       metodos.mensajeInformacion(venta.toString());
+                    }
+
                 }
             }
         } catch (Exception e) {
@@ -134,31 +182,16 @@ public class VentasController implements CrudInterfaces {
             metodos.mensajeInformacion("Hubo un error en la modificación de la venta");
         }
     }
-    
-    @Override
-    public void Eliminar() {
-        int idVenta;
-        idVenta = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de venta que quiere eliminar:"));
-
-        try {
-            for (Venta venta : ventas){
-                if (venta.getNumeroVenta()== idVenta) {
-                    String numeroChasis = venta.getNumeroChasis();
-                    ventas.remove(venta);
-                    
-                    String idComprador = venta.getIdComprador();
-                    Persona persona = personas.buscarPorId(idComprador);
-                    Vehiculo vehiculo = vehiculos.buscarPorChasis(numeroChasis);
-                    vehiculo.marcarComoDevuelto();
-                    persona.marcarComoSinAlquiler();
-                    
-                    metodos.mensajeInformacion("Venta eliminada correctamente");
-                }
-            }
-        } catch (Exception e) {
-            metodos.mensajeInformacion(String.format("El número de venta %s no se encuentra registrado", idVenta));
+@Override
+    public void Informe() {
+        String info = "";
+        for (Venta venta : ventas) {
+            info = info + venta.toString();
         }
+        metodos.mensajeInformacion(info);
     }
+    
+
     
     public void menuVentas() {
         String[] opciones = {"Registrar", "Anular", "Consultar", "Informe", "Volver"};
@@ -185,40 +218,11 @@ public class VentasController implements CrudInterfaces {
         }
     }
 
-    @Override
-    public void Anular() {
-        int idVenta;
-        idVenta = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de venta que quiere anular:"));
-
-        try {
-            for (Venta venta : ventas) {
-                if (venta.getNumeroVenta() == idVenta) {
-                    String numeroChasis = venta.getNumeroChasis();
-                    ventas.remove(venta);
-
-                    String idComprador = venta.getIdComprador();
-                    Persona persona = personas.buscarPorId(idComprador);
-                    Vehiculo vehiculo = vehiculos.buscarPorChasis(numeroChasis);
-                    vehiculo.marcarComoDevuelto();
-                    persona.marcarComoSinAlquiler();
-                    
-                    metodos.mensajeInformacion("Venta anulada correctamente");
-                }
-            }
-        } catch (Exception e) {
-            metodos.mensajeInformacion(String.format("El número de venta %s no se encuentra registrado", idVenta));
-        }
-    }
 
     @Override
-    public void Informe() {
-        String info = "";
-        for (Venta venta : ventas) {
-            info = info + venta.toString();
-        }
-        metodos.mensajeInformacion(info);
+    public void Eliminar() {
+      
     }
-    
     public Boolean hayDisponibilidadVehiculo(String numeroChasis) {
         boolean disponible = true;
         for (Venta venta : ventas) {
@@ -230,6 +234,7 @@ public class VentasController implements CrudInterfaces {
 
         return disponible;
     }
+    
     
     public Boolean existeVehiculoEnCatalogo(String numeroChasis) {
         boolean existe = false;
@@ -270,3 +275,4 @@ public class VentasController implements CrudInterfaces {
         }
     }
 }
+

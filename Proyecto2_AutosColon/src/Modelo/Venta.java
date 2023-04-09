@@ -22,7 +22,9 @@ public class Venta {
     private static final int IVA = 13;
     private double totalIVA;
     private double totalVentaConIVA;
-    
+    private boolean anularVenta;
+
+
     public Venta(){
         
     }
@@ -30,9 +32,10 @@ public class Venta {
     public static void setNumeroVenta() {
         nuevoId++;
     }
-
-    public Venta(String numeroChasis, String idComprador, double precioVenta, LocalDate fechaVenta) {
+    
+    public Venta(String numeroChasis, String idComprador, double precioVenta, LocalDate fechaVenta ) {
         setNumeroVenta();
+//        this.anularVenta = anularventa;
         this.numeroVenta = nuevoId;
         this.numeroChasis = numeroChasis;
         this.idComprador = idComprador;
@@ -89,9 +92,18 @@ public class Venta {
     public void setTotalVentaConIVA(double totalVenta) {
         this.totalVentaConIVA = totalVenta;
     }
+    public boolean isAnularVenta() {
+        return anularVenta;
+    }
+
+    public void setAnularVenta(boolean anularVenta) {
+        this.anularVenta = anularVenta;
+    }
+    
     
     @Override
     public String toString() {
+     
         StringBuilder sb = new StringBuilder();
         NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CR"));
         sb.append("**** Información de la venta # ").append(numeroVenta).append("****");
@@ -107,6 +119,7 @@ public class Venta {
         sb.append("\nTotal de IVA: ").append(formatoMoneda.format(totalIVA));
         sb.append("\nTotal de venta con IVA: ").append(formatoMoneda.format(totalVentaConIVA));
         sb.append("\n--------\n");
+        
         return sb.toString();
     }   
 }
