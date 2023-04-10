@@ -16,7 +16,7 @@ public class Vehiculo {
     private String color;
     private double precio;
     private static int nuevoNumeroVehiculo;
-    private Boolean estaAlquilado;
+    private Boolean estaComprado;
 
     public Vehiculo() {}
 
@@ -33,7 +33,7 @@ public class Vehiculo {
         this.modelo = modelo;
         this.color = color;
         this.precio = precio;
-        this.estaAlquilado = false;
+        this.estaComprado = false;
     }
     
     public int getNumeroVehiculo() {
@@ -92,16 +92,16 @@ public class Vehiculo {
         this.precio = precio;
     }
     
-    public void marcarComoAlquilado(){
-        this.estaAlquilado = true;
+    public void marcarComoComprado(){
+        this.estaComprado = true;
     }
     
-    public void marcarComoDevuelto(){
-        this.estaAlquilado = false;
+    public void marcarComoSinComprar(){
+        this.estaComprado = false;
     }
     
-    public Boolean estaAlquilado(){
-        return estaAlquilado;
+    public Boolean estaComprado(){
+        return estaComprado;
     }
     
     @Override

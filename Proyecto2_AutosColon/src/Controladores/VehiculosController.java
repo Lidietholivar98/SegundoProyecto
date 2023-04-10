@@ -212,7 +212,7 @@ public class VehiculosController implements CrudInterfaces {
 
             if (indexVehiculo != -1) {
                 Vehiculo vehiculo = vehiculos.get(indexVehiculo);
-                if(!vehiculo.estaAlquilado()){
+                if(!vehiculo.estaComprado()){
                     int opcion = metodos.mensajeConfirmacionSIoNo(vehiculo.toString(), "¿Desea eliminar el vehículo?");
                     if(opcion == JOptionPane.YES_NO_OPTION){
                         vehiculos.remove(indexVehiculo);

@@ -67,7 +67,7 @@ public class VentasController implements CrudInterfaces {
             ventas.add(venta);
         }
 
-        vehiculo.marcarComoAlquilado();
+        vehiculo.marcarComoComprado();
         persona.marcarComoComprado();
 
     }
@@ -102,7 +102,7 @@ public class VentasController implements CrudInterfaces {
                         Persona persona = personas.buscarPorId(venta.getIdComprador());
                         Vehiculo vehiculo = vehiculos.buscarPorChasis(venta.getNumeroChasis());
                         persona.marcarComoSinComprar();//Si la venta se anula, la persona debe quedar como sin alquilar
-                        vehiculo.marcarComoDevuelto();//si la venta se anula, el vehiculo debe quedar como devuelto
+                        vehiculo.marcarComoSinComprar();//si la venta se anula, el vehiculo debe quedar como devuelto
                         metodos.mensajeInformacion("Venta anulada correctamente");
                         break;
                     }                    
