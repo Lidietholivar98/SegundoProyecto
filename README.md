@@ -8,7 +8,7 @@ El sistema cuenta con 3 módulos principales:
 2. Módulo de registro de personas
 3. Módulo de registro de ventas
 
-##Integrantes
+## Integrantes
 El proyecto fue desarrollado por:
 	- Lidieth Olivar Torres
 	- Axel Araya Salas
