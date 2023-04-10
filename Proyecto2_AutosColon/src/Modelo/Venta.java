@@ -13,6 +13,7 @@ import java.util.Locale;
  * @author aaraya
  */
 public class Venta {
+
     private int numeroVenta;
     private static int nuevoId;
     private String numeroChasis;
@@ -22,30 +23,28 @@ public class Venta {
     private static final int IVA = 13;
     private double totalIVA;
     private double totalVentaConIVA;
-    private boolean anularVenta;
+    private boolean ventaAnulada;
 
+    public Venta() {
 
-    public Venta(){
-        
     }
-    
+
     public static void setNumeroVenta() {
         nuevoId++;
     }
-    
-    public Venta(String numeroChasis, String idComprador, double precioVenta, LocalDate fechaVenta ) {
+
+    public Venta(String numeroChasis, String idComprador, double precioVenta, LocalDate fechaVenta) {
         setNumeroVenta();
-//        this.anularVenta = anularventa;
         this.numeroVenta = nuevoId;
         this.numeroChasis = numeroChasis;
         this.idComprador = idComprador;
         this.precioVenta = precioVenta;
         this.fechaVenta = fechaVenta;
-        this.totalIVA = precioVenta * (IVA/100.0);
+        this.totalIVA = precioVenta * (IVA / 100.0);
         this.totalVentaConIVA = precioVenta + totalIVA;
     }
-    
-    public int getNumeroVenta(){
+
+    public int getNumeroVenta() {
         return numeroVenta;
     }
 
@@ -76,7 +75,7 @@ public class Venta {
     public LocalDate getFechaVenta() {
         return fechaVenta;
     }
-    
+
     public String getFechaVentaAsStr() {
         return fechaVenta.getDayOfMonth() + "/" + fechaVenta.getMonth() + "/" + fechaVenta.getYear();
     }
@@ -92,18 +91,17 @@ public class Venta {
     public void setTotalVentaConIVA(double totalVenta) {
         this.totalVentaConIVA = totalVenta;
     }
-    public boolean isAnularVenta() {
-        return anularVenta;
+
+    public boolean esAnulada() {
+        return ventaAnulada;
     }
 
-    public void setAnularVenta(boolean anularVenta) {
-        this.anularVenta = anularVenta;
+    public void marcarComoAnulada() {
+        this.ventaAnulada = true;
     }
-    
-    
+
     @Override
     public String toString() {
-     
         StringBuilder sb = new StringBuilder();
         NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CR"));
         sb.append("**** Información de la venta # ").append(numeroVenta).append("****");
@@ -118,8 +116,8 @@ public class Venta {
         sb.append("\nPrecio de venta: ").append(formatoMoneda.format(precioVenta));
         sb.append("\nTotal de IVA: ").append(formatoMoneda.format(totalIVA));
         sb.append("\nTotal de venta con IVA: ").append(formatoMoneda.format(totalVentaConIVA));
-        sb.append("\n--------\n");
-        
+        sb.append("\n\n");
+
         return sb.toString();
-    }   
+    }
 }

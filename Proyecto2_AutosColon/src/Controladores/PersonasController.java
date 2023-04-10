@@ -163,7 +163,7 @@ public class PersonasController implements CrudInterfaces {
 
             if (indexPersona != -1) {
                 Persona persona = personas.get(indexPersona);
-                if(!persona.estaAlquilando()){
+                if(!persona.realizoCompra()){
                     int opcion = metodos.mensajeConfirmacionSIoNo(persona.toString(), "¿Desea eliminar a la persona?");
                     if(opcion == JOptionPane.YES_NO_OPTION){
                         personas.remove(indexPersona);
@@ -208,12 +208,12 @@ public class PersonasController implements CrudInterfaces {
 
     @Override
     public void Anular() {
-
+        throw new UnsupportedOperationException("Método no requerido");
     }    
 
     @Override
     public void Informe() {
-
+        throw new UnsupportedOperationException("Método no requerido");
     }
     
     public int buscarIndicePorId(String identificador){

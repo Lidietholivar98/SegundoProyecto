@@ -6,7 +6,7 @@ public class Persona {
     private String nombre;
     private String numeroTelefono;
     private String email;
-    private Boolean poseeAlquiler;
+    private Boolean poseeCompra;
     
     public Persona() {
     }
@@ -16,7 +16,7 @@ public class Persona {
         this.nombre = nombre;
         this.numeroTelefono = numeroTelefono;
         this.email = email;
-        this.poseeAlquiler = false;
+        this.poseeCompra = false;
     }
     
     public String getNumeroIdentificacion() {
@@ -51,16 +51,16 @@ public class Persona {
         this.email = email;
     }
     
-    public void marcarComoAlquilando(){
-        this.poseeAlquiler = true;
+    public void marcarComoComprado(){
+        this.poseeCompra = true;
     }
     
-    public void marcarComoSinAlquiler(){
-        this.poseeAlquiler = false;
+    public void marcarComoSinComprar(){
+        this.poseeCompra = false;
     }
     
-    public Boolean estaAlquilando(){
-        return poseeAlquiler;
+    public Boolean realizoCompra(){
+        return poseeCompra;
     }
     
     @Override

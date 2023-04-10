@@ -22,7 +22,7 @@ public class Inicio {
         String[] opciones = {"Vehículos","Personas","Ventas","Salir"};
         int opcion= -1;
         while (opcion!=opciones.length-1) {
-            opcion = metodos.menuBotones("Seleccione una opción", "Reservaciones de Vehiculos", opciones, "Salir");
+            opcion = metodos.menuBotones("Seleccione una opción", "Reservaciones de Vehículos", opciones, "Salir");
             switch (opcion) {
                 case 0:   
                     vehiculos.menuVehiculos();

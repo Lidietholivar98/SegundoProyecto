@@ -257,10 +257,12 @@ public class VehiculosController implements CrudInterfaces {
 
     @Override
     public void Anular() {
+        throw new UnsupportedOperationException("Método no requerido");
     }
 
     @Override
     public void Informe() {
+        throw new UnsupportedOperationException("Método no requerido");
     }
     
     public int buscarIndicePorChasis(String chasis){
